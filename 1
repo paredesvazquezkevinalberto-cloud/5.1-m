@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos
+x_points = np.array([0.5, 1.0, 1.5, 2.0])
+y_points = np.array([1.2, 2.3, 3.7, 5.2])
+
+def lagrange_interpolation(x, x_points, y_points):
+    n = len(x_points)
+    result = 0
+    for i in range(n):
+        term = y_points[i]
+        for j in range(n):
+            if i != j:
+                term *= (x - x_points[j]) / (x_points[i] - x_points[j])
+        result += term
+    return result
+
+# Evaluación en x=1.25
+x_eval = 1.25
+y_eval = lagrange_interpolation(x_eval, x_points, y_points)
+print("Deformación en x=1.25 m:", y_eval)
+
+# Gráfica
+x_values = np.linspace(min(x_points), max(x_points), 100)
+y_values = [lagrange_interpolation(x, x_points, y_points) for x in x_values]
+
+plt.plot(x_values, y_values, label="Interpolación Lagrange", color="blue")
+plt.scatter(x_points, y_points, color="red", label="Datos originales")
+plt.scatter(x_eval, y_eval, color="green", label=f"Interpolado en {x_eval}")
+plt.xlabel("Posición (m)")
+plt.ylabel("Deformación (mm)")
+plt.title("Esfuerzos en la viga")
+plt.legend()
+plt.grid(True)
+plt.show()
